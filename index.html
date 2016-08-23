@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		input,select,textarea{display: block;margin-bottom: 5px;width: 300px;resize: none;}
+		[type="checkbox"],[type="radio"]{display: inline-block;width: auto;}
+	</style>
+</head>
+<body>
+	<form action=""></form>
+	<form action="">
+		<input type="text" name="Nome" id="Nome" placeholder="Nome">
+		<input type="email" name="email" id="Email" placeholder="Email">
+		<input type="tel" name="telefone" placeholder="telefone">
+		<input type="text" name="CPF" placeholder="CPF">
+		<input type="date" name="Calendar" placeholder="Calendar">
+		<input type="color" name="Cor" placeholder="Cor">
+		<div>
+			<label><input type="radio" name="tipo" id="tipo1" value="1"> Tipo 1</label>
+			<label><input type="radio" name="tipo" id="tipo2" value="2"> Tipo 2</label>
+			<label><input type="radio" name="tipo" id="tipo3" value="3"> Tipo 3</label>
+		</div>
+		<div>
+			<label><input type="checkbox" name="varios" id="varios1" value="1"> Varios 1</label>
+			<label><input type="checkbox" name="varios" id="varios2" value="2"> Varios 2</label>
+			<label><input type="checkbox" name="varios" id="varios3" value="3"> Varios 3</label>
+		</div>
+		<select name="Assunto">
+			<option value="">Assunto</option>
+			<option value="valor 1">valor 1</option>
+			<option value="valor 2">valor 2</option>
+			<option value="valor 3">valor 3</option>
+		</select>
+		<textarea name="Mensagem" placeholder="Mensagem"></textarea>
+		<input type="submit" value="ENVIAR">
+	</form>
+	<script>
+		/*START DEMO - SCRIPT PARA PREENCHER O FORMULARIO: aperte ctrl + enter*/
+		document.addEventListener('keyup', function(e){
+			if(e.keyCode===13 && e.ctrlKey===true){
+				document.querySelector('[name="Nome"]').value='Filipe Guarnieri';
+				document.querySelector('[name="email"]').value='fi@fi.com';
+				document.querySelector('[name="telefone"]').value='1152218817';
+				document.querySelector('[name="CPF"]').value='33402474800';
+				document.querySelector('[name="Calendar"]').value='1990-11-15';
+				document.querySelector('[name="Cor"]').value='#cc0000';
+				document.querySelector('[type="radio"], [type="checkbox"]').setAttribute('checked', 'checked');
+				document.querySelector('select').selectedIndex=1;
+			}
+		});
+		/*END DEMO*/
+
+
+		(function(a){
+			window.SaveFields = function(){
+				var tag = a.querySelectorAll('input:not([type="submit"]),select,textarea')
+				, forms = a.querySelectorAll('form')
+				, saveArray = []
+				;
+				tag.forEach(function(e, f){
+					saveArray.push({type: e.type,name: e.name, value: e.value});
+				});
+				("keyup change".split(" ")).forEach(function(f){
+					a.addEventListener(f, function(e){
+						var tagName = e.target.tagName;
+						if(tagName==='INPUT'||tagName==='TEXTAREA'||tagName==='SELECT'){
+							for(input of saveArray){
+								if(input.name===e.target.name){
+									localStorage.setItem('SaveFields_'+input.name, e.target.value);
+								};
+							}
+						}
+					}, false);
+				});
+				forms.forEach(function(e, f){
+					e.addEventListener('submit', function(g){
+						for(i in localStorage){
+							console.log(localStorage.removeItem(i))
+						}
+					}, false);
+				});
+				for(i in localStorage){
+					if(/SaveFields_/.test(i)){
+						var name = i.replace('SaveFields_','')
+						, input = a.querySelector('[name="'+name+'"]')
+						, inputValue = localStorage.getItem(i)
+						;
+						if(input.type==="checkbox"||input.type==="radio"){
+							a.querySelector('[name="'+name+'"][value="'+inputValue+'"]').setAttribute('checked', 'checked');
+						} else {
+							input.value=inputValue;
+						}
+					}
+				}
+			}
+			SaveFields();
+		})(document);
+	</script>
+</body>
+</html>
