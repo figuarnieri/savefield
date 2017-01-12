@@ -4,29 +4,41 @@
 	<meta charset="UTF-8">
 	<title>Document</title>
 	<style>
-		input,select,textarea{display: block;margin-bottom: 5px;width: 300px;resize: none;}
+		*{margin: 0;padding: 0;box-sizing: border-box;}
+		input,select,textarea{display: block;margin-bottom: 5px;width: 300px;resize: none;font-size: 14px;font-family: Arial;padding: 10px;width: 100%;}
 		[type="checkbox"],[type="radio"]{display: inline-block;width: auto;}
+		[type="color"]{padding: 1px;}
+		label{width: 31.333%;padding: 5px;margin: 5px 1%;float: left;border: 1px solid #ddd;border-radius: 3px;}
+		form{width: 48%;padding: 10px;margin: 10px 1%;background-color: #eee;border: 1px solid #ddd;border-radius: 4px;float: left;}
 	</style>
 </head>
 <body>
-	<form action=""></form>
-	<form action="">
+	<form action="" method="post" id="Form1">
+		<input type="text" name="Nome1" id="Nome1" placeholder="Nome">
+		<input type="email" name="email1" id="Email1" placeholder="Email">
+		<input type="tel" name="telefone1" placeholder="telefone">
+		<input type="text" name="CPF1" placeholder="CPF">
+		<input type="date" name="Calendar1" placeholder="Calendar">
+		<input type="color" name="Cor1" placeholder="Cor">
+		<button type="submit">Enviar</button>
+	</form>
+	<form action="" method="post" id="Form2">
+		<div>
+			<label><input type="checkbox" name="varios" id="varios1" value="1"> Varios 1</label>
+			<label><input type="checkbox" name="varios" id="varios2" value="2"> Varios 2</label>
+			<label><input type="checkbox" name="varios" id="varios3" value="3"> Varios 3</label>
+		</div>
+		<div>
+			<label><input type="radio" name="tipo" id="tipo1" value="1"> Tipo 1</label>
+			<label><input type="radio" name="tipo" id="tipo2" value="2"> Tipo 2</label>
+			<label><input type="radio" name="tipo" id="tipo3" value="3"> Tipo 3</label>
+		</div>
 		<input type="text" name="Nome" id="Nome" placeholder="Nome">
 		<input type="email" name="email" id="Email" placeholder="Email">
 		<input type="tel" name="telefone" placeholder="telefone">
 		<input type="text" name="CPF" placeholder="CPF">
 		<input type="date" name="Calendar" placeholder="Calendar">
 		<input type="color" name="Cor" placeholder="Cor">
-		<div>
-			<label><input type="radio" name="tipo" id="tipo1" value="1"> Tipo 1</label>
-			<label><input type="radio" name="tipo" id="tipo2" value="2"> Tipo 2</label>
-			<label><input type="radio" name="tipo" id="tipo3" value="3"> Tipo 3</label>
-		</div>
-		<div>
-			<label><input type="checkbox" name="varios" id="varios1" value="1"> Varios 1</label>
-			<label><input type="checkbox" name="varios" id="varios2" value="2"> Varios 2</label>
-			<label><input type="checkbox" name="varios" id="varios3" value="3"> Varios 3</label>
-		</div>
 		<select name="Assunto">
 			<option value="">Assunto</option>
 			<option value="valor 1">valor 1</option>
@@ -36,67 +48,10 @@
 		<textarea name="Mensagem" placeholder="Mensagem"></textarea>
 		<input type="submit" value="ENVIAR">
 	</form>
+	<script src="jquery-3.1.1.js"></script>
+	<script src="savefields.js"></script>
 	<script>
-		/*START DEMO - SCRIPT PARA PREENCHER O FORMULARIO: aperte ctrl + enter*/
-		document.addEventListener('keyup', function(e){
-			if(e.keyCode===13 && e.ctrlKey===true){
-				document.querySelector('[name="Nome"]').value='Filipe Guarnieri';
-				document.querySelector('[name="email"]').value='fi@fi.com';
-				document.querySelector('[name="telefone"]').value='1152218817';
-				document.querySelector('[name="CPF"]').value='33402474800';
-				document.querySelector('[name="Calendar"]').value='1990-11-15';
-				document.querySelector('[name="Cor"]').value='#cc0000';
-				document.querySelector('[type="radio"], [type="checkbox"]').setAttribute('checked', 'checked');
-				document.querySelector('select').selectedIndex=1;
-			}
-		});
-		/*END DEMO*/
-
-
-		(function(a){
-			window.SaveFields = function(){
-				var tag = a.querySelectorAll('input:not([type="submit"]),select,textarea')
-				, forms = a.querySelectorAll('form')
-				, saveArray = []
-				;
-				tag.forEach(function(e, f){
-					saveArray.push({type: e.type,name: e.name, value: e.value});
-				});
-				("keyup change".split(" ")).forEach(function(f){
-					a.addEventListener(f, function(e){
-						var tagName = e.target.tagName;
-						if(tagName==='INPUT'||tagName==='TEXTAREA'||tagName==='SELECT'){
-							for(input of saveArray){
-								if(input.name===e.target.name){
-									localStorage.setItem('SaveFields_'+input.name, e.target.value);
-								};
-							}
-						}
-					}, false);
-				});
-				forms.forEach(function(e, f){
-					e.addEventListener('submit', function(g){
-						for(i in localStorage){
-							console.log(localStorage.removeItem(i))
-						}
-					}, false);
-				});
-				for(i in localStorage){
-					if(/SaveFields_/.test(i)){
-						var name = i.replace('SaveFields_','')
-						, input = a.querySelector('[name="'+name+'"]')
-						, inputValue = localStorage.getItem(i)
-						;
-						if(input.type==="checkbox"||input.type==="radio"){
-							a.querySelector('[name="'+name+'"][value="'+inputValue+'"]').setAttribute('checked', 'checked');
-						} else {
-							input.value=inputValue;
-						}
-					}
-				}
-			}
-			SaveFields();
-		})(document);
+		$('form').saveFields();
 	</script>
 </body>
 </html>
